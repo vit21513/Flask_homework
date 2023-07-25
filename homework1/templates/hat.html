@@ -1,0 +1,33 @@
+{% extends "index.html" %}
+
+{% block head %}
+
+<div>
+<table class="table">
+
+        <thead>
+        <tr>
+            <th scope="col">Наименование</th>
+            <th scope="col">размер</th>
+            <th scope="col">цена, рупий</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in  hats %}
+        <tr>
+            {% if item.cost <= num %}
+            <th scope="col">{{item.name}}</th>
+            <th scope="col">{{item.size}}</th>
+            <th scope="col">{{item.cost}}</th>
+            {% endif %}
+        </tr>
+
+        {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+<div class="container text-center">
+    <h5>Вы можете отсортрировать товар по максимальной цене. В адресной строке после / введите максимальную цену</h5>
+    <div>
+{% endblock %}

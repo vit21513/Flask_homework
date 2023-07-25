@@ -1,0 +1,39 @@
+{% extends "index.html" %}
+
+{% block head %}
+
+
+
+<div class="container text-center">
+
+    <div style="color:#A52A2A">
+        <img style="max-width: 100%; " src="{{ url_for('static', filename='shoes.jpg' ) }}">
+    </div>
+</div>
+<div>
+<table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Наименование</th>
+            <th scope="col">размер</th>
+            <th scope="col">цена, рупий</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in  all_shoes %}
+        <tr>
+            <th scope="col">{{item.name}}</th>
+            <th scope="col">{{item.size}}</th>
+            <th scope="col">{{item.cost}}</th>
+        </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+
+
+
+
+
+{% endblock %}
