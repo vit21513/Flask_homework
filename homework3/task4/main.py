@@ -3,13 +3,12 @@ from flask_wtf.csrf import CSRFProtect
 from task4.forms import RegistrationForm
 from task4.models import db, User
 import hashlib
-
+from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecretkey'
 csrf = CSRFProtect(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///users.db'
 db.init_app(app)
-
 
 @app.cli.command("init-db")
 def init_db():
@@ -30,7 +29,8 @@ def register():
             error_msg = 'Username or email already exists.'
             form.username.errors.append(error_msg)
             return render_template('register.html', form=form)
-        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        hashed_password = generate_password_hash(password)
+        # hashed_password = hashlib.sha256(password.encode()).hexdigest()
         new_user = User(username=username, email=email, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
