@@ -4,11 +4,13 @@ from task4.forms import RegistrationForm
 from task4.models import db, User
 import hashlib
 from werkzeug.security import generate_password_hash, check_password_hash
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecretkey'
 csrf = CSRFProtect(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///users.db'
 db.init_app(app)
+
 
 @app.cli.command("init-db")
 def init_db():
@@ -21,17 +23,18 @@ def register():
     form = RegistrationForm()
     if request.method == 'POST' and form.validate():
         username = form.username.data
+        lastname = form.lastname.data
         email = form.email.data
         password = form.password.data
-        existing_name = User.query.filter(username == User.username).first()
         existing_email = User.query.filter(email == User.email).first()
-        if existing_name or existing_email:
-            error_msg = 'Username or email already exists.'
+        # так как бывают люди с одинаковыми именами и фамилиями то проверяем на уникальность только почту
+        if existing_email:
+            error_msg = 'User or email already exists.'
             form.username.errors.append(error_msg)
             return render_template('register.html', form=form)
         hashed_password = generate_password_hash(password)
         # hashed_password = hashlib.sha256(password.encode()).hexdigest()
-        new_user = User(username=username, email=email, password=hashed_password)
+        new_user = User(username=username,lastname=lastname, email=email, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
         success_msg = 'Registration successful!'
