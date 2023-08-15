@@ -20,6 +20,17 @@ async def add_user(name: str = Form(...), last_name: str = Form(...), email: str
     return {"message": "User added"}
 
 
+@router.post("/user/{user_id}", description="Просмотреть  Пользователя")
+async def viev_user(user_id: int, user: User):
+    query = users_db.select().where(users_db.c.id == user_id)
+    user_quer = await db.fetch_one(query)
+    if not user_quer:
+        raise HTTPException(status_code=404, detail="User not found or has no orders")
+    return user_quer
+
+
+
+
 @router.put("/update_user/{user_id}", description="Изменить пользователя")
 async def update_user(user_id: int, user: InputUser):
     query = users_db.update().where(users_db.c.id == user_id).values(
