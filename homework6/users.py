@@ -25,7 +25,7 @@ async def viev_user(user_id: int, user: User):
     query = users_db.select().where(users_db.c.id == user_id)
     user_quer = await db.fetch_one(query)
     if not user_quer:
-        raise HTTPException(status_code=404, detail="User not found or has no orders")
+        raise HTTPException(status_code=404, detail="User not found")
     return user_quer
 
 
